@@ -1,2 +1,2 @@
-# kairo
+# Manavya Verse
 online ai friend
