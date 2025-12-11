@@ -48,6 +48,8 @@ function Home() {
       });
       const data = await response.json();
 
+      console.log(data.response)
+
       // Add AI response to messages state
       messagesSet((prev) => [...prev, { text: data.response, sender: "ai" }]);
 

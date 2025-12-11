@@ -12,6 +12,7 @@ export const generateThreadId = async () => {
             console.log(data.errors)
             return {success:false, errors:data.errors}
         }
+        console.log(data.thread_id)
         return {success:true, thread_id:data.chat_thread_id}
     } catch (error) {
         return {success:false, errors:[{msg:error.message}]}       

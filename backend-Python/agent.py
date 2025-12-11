@@ -27,30 +27,30 @@ class chatState(TypedDict):
 
 DB_URI = os.getenv('DB_URI')
 client = MongoClient(DB_URI)
-checkpointer = MongoDBSaver(client['message_state'])
+checkpointer = MongoDBSaver(client) if client else None
 
 graph = StateGraph(chatState)
 
 @dataclass
 class ContextSchema:
     summary:str
+
+# runtime:Runtime[ContextSchema]
     
 msgObj = []
 # generate function
-def chatNode(state:chatState, runtime:Runtime[ContextSchema]):
-    print(state['messages'])
-    for msg in state["messages"]:
-        msgObj.append({msg.content})
-
-    newMsg = msgObj[-1]
-    recentMsg = msgObj[-5:]
+def chatNode(state:chatState):
+    messages = [msg.content for msg in state["messages"]]  # clean list
+    new_msg = messages[-1] if messages else ""
+    # summary = runtime.context.summary if runtime.context else ""
 
 
-    prompt = f''' Your are an virutal friend, your name is Kairo , talks like an real friend in short msg type chats, do not need to unneccessarly send large text
+
+    prompt = f''' Your are an friend, your name is Kairo , talks like an real friend in short msg type chats, do not need to unneccessarly send large text
      
-    Your Question : {newMsg}
+    Your Question : {new_msg}
 
-    Old Conversation : {runtime.context['summary']}
+    Old Conversation : 
        '''
 
     response = LLM.invoke(prompt).content

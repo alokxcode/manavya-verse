@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from langchain_core.messages import HumanMessage
-from agent import chatbot
+from agent import chatbot, ContextSchema
 from fastapi.middleware.cors import CORSMiddleware
 import asyncio
 
@@ -31,8 +31,10 @@ class Message(BaseModel):
 
 @app.post('/')
 async def chatEndpoint(message: Message):
-    CONFIG = {'configurable':{'thread_id':message.thread_id}}
+    print(message.text)
     summary = await asyncio.to_thread(get_summary, message)
-    res = chatbot.invoke({'messages':[HumanMessage(content=message.text)]}, config=CONFIG,context={"summary": summary})
+    res = chatbot.invoke({'messages':[HumanMessage(content=message.text)]}, config={'configurable':{'thread_id':message.thread_id}})
     asyncio.create_task(sumarise_and_update_memory(message, res['messages'][-1].content))
     return {'response':res['messages'][-1].content}
+
+#{"summary": summary}

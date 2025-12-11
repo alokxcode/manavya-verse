@@ -13,7 +13,7 @@ dotenv.config();
 
 // Enable CORS for frontend origin and allow credentials
 app.use(cors({
-    origin: "http://localhost:5173", // or whatever port Vite is running
+    origin: ["http://localhost:5173","http://127.0.0.1:5173"], // or whatever port Vite is running
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true, // if you’re sending cookies/auth headers
   }))
